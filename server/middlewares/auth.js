@@ -12,8 +12,6 @@ const authToken = function(req, res, next) {
     if (!valid) {
       return res.status(401).json({ message: 'Unauthorized: Invalid or expired token.' });
     }
-
-    //DO SOMETHING WITH DECODED
   
     next()
 };
