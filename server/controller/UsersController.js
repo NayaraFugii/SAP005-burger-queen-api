@@ -49,12 +49,12 @@ const deleteUser = (req, res) => {
 
 const createUser = async (req, res) => {
     try{        
-        const { name, email , password , role, restaurant } = req.body
+        const { name, email , passwoard , role, restaurant } = req.body
 
-        console.log(password)
-        await UserModel.create({name, email, password, role, restaurant})
+        console.log(passwoard)
+        await UserModel.create({name, email, passwoard, role, restaurant})
     
-        const passwordHash = await bcrypt.hash(password, 10)   
+        const passwordHash = await bcrypt.hash(passwoard, 10)   
     
         return res.status(201).send({message: 'User create'})
 
