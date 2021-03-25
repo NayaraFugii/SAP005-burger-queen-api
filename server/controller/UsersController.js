@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt')
-const userModel = require('../db/models/userModel')
+const UserModel = require('../db/models').User
+
 
 const getAllUsers = async (req, res) => {
-    const users = await userModel.findAll({
+    const users = await UserModel.findAll({
         attributes: ['email']
     })
 
@@ -13,7 +14,7 @@ const updateUser = async (req, res) => {
     const { userID } = req.params
     const { email } = req.body
 
-    const user = await userModel.findByPk(userID);
+    const user = await UserModel.findByPk(userID);
 
     if(!user) return res.status(404).json({ message: 'User not found.'})
     
@@ -47,17 +48,18 @@ const deleteUser = (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { name, email , password , role, restaurant } = req.body
-
+    
     try{        
-        UserModel({name, email, password, role, restaurant})
+        const { name, email , password , role, restaurant } = req.body
+
+        await UserModel.create({name, email, password, role, restaurant})
     
         const passwordHash = await bcrypt.hash(password, 10)   
     
         return res.status(201).send({message: 'User create'})
 
-    }catch{
-        
+    }catch(error){
+        console.log(error)
         return res.status(400).json({ message: 'Missing informations'})
     }
     
