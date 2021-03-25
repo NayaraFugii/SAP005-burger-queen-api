@@ -48,10 +48,10 @@ const deleteUser = (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    
     try{        
         const { name, email , password , role, restaurant } = req.body
 
+        console.log(password)
         await UserModel.create({name, email, password, role, restaurant})
     
         const passwordHash = await bcrypt.hash(password, 10)   
