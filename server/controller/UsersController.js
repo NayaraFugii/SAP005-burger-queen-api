@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt')
-const UserModel = require('../db/models/UserModel')
+const userModel = require('../db/models/userModel')
 
 const getAllUsers = async (req, res) => {
-    const users = await UserModel.findAll({
+    const users = await userModel.findAll({
         attributes: ['email']
     })
 
@@ -13,7 +13,7 @@ const updateUser = async (req, res) => {
     const { userID } = req.params
     const { email } = req.body
 
-    const user = await UserModel.findByPk(userID);
+    const user = await userModel.findByPk(userID);
 
     if(!user) return res.status(404).json({ message: 'User not found.'})
     
@@ -49,24 +49,18 @@ const deleteUser = (req, res) => {
 const createUser = async (req, res) => {
     const { name, email , password , role, restaurant } = req.body
 
-    if(!email  || !password || !role || !restaurant || !name ) return res.status(400).json({ message: 'Missing \'informations\'. 🔐' })
+    try{        
+        UserModel({name, email, password, role, restaurant})
+    
+        const passwordHash = await bcrypt.hash(password, 10)   
+    
+        return res.status(201).send({message: 'User create'})
 
-    const passwordHash = await bcrypt.hash(password, 10)
-
-    const [user, alreadyCreated] = await UserModel.findOrCreate({ 
-        where: { email: email }, 
-        defaults: {
-            email: email,
-            name: name,
-            role: role,
-            restaurant: restaurant,
-            password: passwordHash,
-      }
-    });
-
-    if(!alreadyCreated) return res.status(400).json({ message: 'User already exist' })
-
-    return res.status(201).send({message: 'User create'})
+    }catch{
+        
+        return res.status(400).json({ message: 'Missing informations'})
+    }
+    
 }
 
 module.exports = { getAllUsers, updateUser , getUserById, deleteUser, createUser }
