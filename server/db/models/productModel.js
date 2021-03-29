@@ -2,36 +2,44 @@ const { Model } = require('sequelize');
 
 
 module.exports = (sequelize, DataTypes)=>{
-    class Users extends Model {}
+    class Products extends Model {}
 
-    Users.init({
+    Products.init({
       
       name: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      email: {
-        type: DataTypes.STRING,
+      price: {
+        type: DataTypes.NUMBER,
         allowNull: false    
       },  
-      passwoard: {
+      flavor: {
         type: DataTypes.STRING,
-        allowNull: false    
+        allowNull: true    
       },    
-      role: {
+      complement: {
+        type: DataTypes.STRING,
+        allowNull: true    
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false 
+      },
+      type: {
         type: DataTypes.STRING,
         allowNull: false    
       },
-      restaurant: {
+      sub_type: {
         type: DataTypes.STRING,
         allowNull: false    
       }
     }, {  
       sequelize,
-      modelName: 'Users' 
+      modelName: 'Products' 
     
     });
 
-    Users.sync()
-    return Users;
+    Products.sync()
+    return Products;
 };

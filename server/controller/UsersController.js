@@ -1,10 +1,10 @@
 const bcrypt = require('bcrypt')
-const UserModel = require('../db/models').User
+const UserModel = require('../db/models').Users
 
 
 const getAllUsers = async (req, res) => {
     const users = await UserModel.findAll({
-        attributes: ['email']
+        attributes: ['id','email', 'name', 'role','restaurant']
     })
 
     return res.status(200).json({ users })
@@ -12,13 +12,17 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { userID } = req.params
-    const { email } = req.body
+    const { email, name, role, restaurant } = req.body
 
     const user = await UserModel.findByPk(userID);
 
     if(!user) return res.status(404).json({ message: 'User not found.'})
     
     user.email = email
+    user.name = name
+    user.role = role
+    user.restaurant = restaurant
+
 
     await user.save();
     return res.status(200).send()
@@ -29,7 +33,7 @@ const getUserById = async (req, res) => {
 
     if(!userID) return res.status(400).json({ message: 'Missing \'UserId\'.' })
 
-    const user = await UserModel.findOne({ where: { id: userID }, attributes: ['email']})
+    const user = await UserModel.findOne({ where: { id: userID }, attributes: ['email', 'name', 'role','restaurant']})
 
     if(!user) return res.status(404).json({ message: 'User not found.' })
 
