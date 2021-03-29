@@ -5,13 +5,12 @@ module.exports = (sequelize, DataTypes)=>{
     class Products extends Model {}
 
     Products.init({
-      
       name: {
         type: DataTypes.STRING,
         allowNull: false
       },
       price: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false    
       },  
       flavor: {

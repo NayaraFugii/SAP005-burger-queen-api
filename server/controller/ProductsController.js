@@ -1,11 +1,31 @@
 const ProductModel = require('../db/models').Products
 
-  const getAllProducts = (req, res) => {
-      return res.status(200).json({ message: 'ok'})
+  const getAllProducts = async (req, res) => {
+    const products = await ProductModel.findAll({
+      attributes: ['id','name', 'price', 'flavor', 'complement', 'image', 'type', 'sub_type']
+  })
+
+  return res.status(200).json({ products })
   }
 
-  const updateProduct = (req, res) => {
-    return res.status(200).json({ message: 'ok'})
+  const updateProduct = async (req, res) => {
+    const { productID } = req.params
+    const { name, price , flavor , complement, image, type, sub_type } = req.body
+
+    const products = await ProductModel.findByPk(productID);
+
+    if(!products) return res.status(404).json({ message: 'Product not found.'})
+    
+    products.name = name
+    products.price = price
+    products.flavor = flavor
+    products.complement = complement
+    products.image = image
+    products.type = type
+    products.sub_type = sub_type
+
+    await products.save();
+    return res.status(200).send()
 
   }
   
