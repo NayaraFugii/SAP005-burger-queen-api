@@ -8,7 +8,6 @@ if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
 app.use(express.json())
-
 app.use(routes);
 
 app.listen(port, () => {
